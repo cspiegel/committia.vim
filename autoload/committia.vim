@@ -71,17 +71,6 @@ function! s:execute_hook(name, info) abort
     endif
 endfunction
 
-function! s:remove_all_contents_except_for_commit_message(vcs) abort
-    1
-    " Handle squash message
-    let line = call('committia#' . a:vcs . '#end_of_edit_region_line', [])
-    if 0 < line && line <= line('$')
-        execute 'silent' line . ',$delete _'
-    endif
-    1
-    execute 'vertical resize' g:committia_edit_window_width
-endfunction
-
 function! s:callback_on_window_closed() abort
     if bufnr('%') == s:current_info.edit_bufnr
         for n in ['diff', 'status']
@@ -146,7 +135,6 @@ function! committia#open_multicolumn(vcs) abort
     call s:execute_hook('status_open', info)
     wincmd p
 
-    call s:remove_all_contents_except_for_commit_message(info.vcs)
     call s:execute_hook('edit_open', info)
 
     let s:current_info = info
